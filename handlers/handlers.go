@@ -3,10 +3,12 @@ package handlers
 import (
 	"context"
 	"fmt"
+	"github.com/SeiyaJapon/golang/TwitterGo/jwt"
 
 	"github.com/aws/aws-lambda-go/events"
 
 	"github.com/SeiyaJapon/golang/TwitterGo/models"
+	"github.com/SeiyaJapon/golang/TwitterGo/routes"
 )
 
 func Handlers(ctx context.Context, request events.APIGatewayProxyRequest) models.RestApi {
@@ -15,10 +17,20 @@ func Handlers(ctx context.Context, request events.APIGatewayProxyRequest) models
 	var response models.RestApi
 	response.Status = 400
 
+	isSuccess, statusCode, msg, _ := validateAuthorization(ctx, request)
+
+	if !isSuccess {
+		response.Status = statusCode
+		response.Message = msg
+
+		return response
+	}
+
 	switch ctx.Value(models.Key("method")).(string) {
 	case "POST":
 		switch ctx.Value(models.Key("method")).(string) {
-
+		case "register":
+			return routes.Register(ctx)
 		}
 		//
 	case "GET":
@@ -41,4 +53,36 @@ func Handlers(ctx context.Context, request events.APIGatewayProxyRequest) models
 	response.Message = "Method Invalid"
 
 	return response
+}
+
+func validateAuthorization(ctx context.Context, request events.APIGatewayProxyRequest) (bool, int, string, models.Claim) {
+	path := ctx.Value(models.Key("path")).(string)
+
+	if path == "register" || path == "login" || path == "getAvatar" || path == "getBanner" {
+		return true, 200, "", models.Claim{}
+	}
+
+	token := request.Headers["authorization"]
+
+	if len(token) == 0 {
+		return false, 401, "Required token", models.Claim{}
+	}
+
+	claim, allOK, msg, err := jwt.ProcessToken(token, ctx.Value(models.Key("jwtSign")).(string))
+
+	if !allOK {
+		if err != nil {
+			fmt.Println("Token error: " + err.Error())
+
+			return false, 401, err.Error(), models.Claim{}
+		} else {
+			fmt.Println("Token error: " + msg)
+
+			return false, 401, msg, models.Claim{}
+		}
+	}
+
+	fmt.Println("Token OK")
+
+	return true, 200, msg, *claim
 }
