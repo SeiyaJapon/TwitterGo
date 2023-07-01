@@ -55,13 +55,13 @@ func execLambda(theContext context.Context, request events.APIGatewayProxyReques
 
 	awsgo.Ctx = context.WithValue(awsgo.Ctx, models.Key("path"), path)
 	awsgo.Ctx = context.WithValue(awsgo.Ctx, models.Key("method"), request.HTTPMethod)
-	awsgo.Ctx = context.WithValue(awsgo.Ctx, models.Key("user"), SecretModel.Username)
+	awsgo.Ctx = context.WithValue(awsgo.Ctx, models.Key("username"), SecretModel.Username)
 	awsgo.Ctx = context.WithValue(awsgo.Ctx, models.Key("password"), SecretModel.Password)
 	awsgo.Ctx = context.WithValue(awsgo.Ctx, models.Key("host"), SecretModel.Host)
 	awsgo.Ctx = context.WithValue(awsgo.Ctx, models.Key("database"), SecretModel.Database)
-	awsgo.Ctx = context.WithValue(awsgo.Ctx, models.Key("jwtsign"), SecretModel.JWTSign)
+	awsgo.Ctx = context.WithValue(awsgo.Ctx, models.Key("jwtSign"), SecretModel.JWTSign)
 	awsgo.Ctx = context.WithValue(awsgo.Ctx, models.Key("body"), request.Body)
-	awsgo.Ctx = context.WithValue(awsgo.Ctx, models.Key("bucktName"), os.Getenv("BucketName"))
+	awsgo.Ctx = context.WithValue(awsgo.Ctx, models.Key("bucketName"), os.Getenv("BucketName"))
 
 	err = db.ConnectDB(awsgo.Ctx)
 
