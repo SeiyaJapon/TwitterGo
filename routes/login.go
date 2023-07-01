@@ -6,6 +6,9 @@ import (
 	"github.com/SeiyaJapon/golang/TwitterGo/db"
 	"github.com/SeiyaJapon/golang/TwitterGo/jwt"
 	"github.com/SeiyaJapon/golang/TwitterGo/models"
+	"github.com/aws/aws-lambda-go/events"
+	"net/http"
+	"time"
 )
 
 func Login(ctx context.Context) models.RestApi {
@@ -45,4 +48,38 @@ func Login(ctx context.Context) models.RestApi {
 		return response
 	}
 
+	loginResponse := models.LoginResponse{
+		Token: jwtKey,
+	}
+
+	token, errResponseLogin := json.Marshal(loginResponse)
+
+	if errResponseLogin != nil {
+		response.Message = "Error formating token: " + errResponseLogin.Error()
+
+		return response
+	}
+
+	cookie := &http.Cookie{
+		Name:    "token",
+		Value:   jwtKey,
+		Expires: time.Now().Add(24 * time.Hour),
+	}
+	cookieString := cookie.String()
+
+	customResponse := &events.APIGatewayProxyResponse{
+		StatusCode: 200,
+		Body:       string(token),
+		Headers: map[string]string{
+			"Content-Type":                "application/json",
+			"Access-Control-Allow-Origin": "*",
+			"Set-Cookie":                  cookieString,
+		},
+	}
+
+	response.Status = 200
+	response.Message = string(token)
+	response.CustomResp = customResponse
+
+	return response
 }
