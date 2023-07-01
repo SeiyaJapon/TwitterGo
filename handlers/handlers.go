@@ -32,7 +32,7 @@ func Handlers(ctx context.Context, request events.APIGatewayProxyRequest) models
 		case "register":
 			return routes.Register(ctx)
 		case "login":
-			return
+			return routes.Login(ctx)
 		}
 	case "GET":
 		switch ctx.Value(models.Key("path")).(string) {

@@ -32,7 +32,7 @@ func Login(ctx context.Context) models.RestApi {
 		return response
 	}
 
-	userData, exists := db.tryLogin(user.Email, user.Password)
+	userData, exists := db.TryLogin(user.Email, user.Password)
 
 	if !exists {
 		response.Message = "User and/or password incorrect: " + err.Error()
@@ -40,7 +40,7 @@ func Login(ctx context.Context) models.RestApi {
 		return response
 	}
 
-	jwtKey, err := jwt.GenerateJWT(ctx, user)
+	jwtKey, err := jwt.GenerateJWT(ctx, userData)
 
 	if err != nil {
 		response.Message = "Error generating token: " + err.Error()
