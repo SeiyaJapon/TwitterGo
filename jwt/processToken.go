@@ -2,6 +2,7 @@ package jwt
 
 import (
 	"errors"
+	"github.com/SeiyaJapon/golang/TwitterGo/db"
 	"strings"
 
 	jwt "github.com/golang-jwt/jwt/v5"
@@ -30,6 +31,14 @@ func ProcessToken(tk string, JWTSign string) (*models.Claim, bool, string, error
 
 	if err == nil {
 		// check DB
+		_, found, _ := db.ExistUser(claims.Email)
+
+		if found {
+			Email = claims.Email
+			IDUsuario = claims.ID
+		}
+
+		return &claims, found, IDUsuario, nil
 	}
 
 	if !tkn.Valid {
