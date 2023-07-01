@@ -17,9 +17,12 @@ func Register(ctx context.Context) models.RestApi {
 	fmt.Println("Go into Register")
 
 	body := ctx.Value(models.Key("body")).(string)
+	fmt.Println("1")
 	err := json.Unmarshal([]byte(body), &user)
+	fmt.Println("2")
 
 	if err != nil {
+		fmt.Println("3")
 		response.Message = err.Error()
 
 		fmt.Println(response.Message)
@@ -43,7 +46,9 @@ func Register(ctx context.Context) models.RestApi {
 		return response
 	}
 
+	fmt.Println("4")
 	_, found, _ := db.ExistUser(user.Email)
+	fmt.Println("5")
 
 	if found {
 		response.Message = "Already exists an user with this email"
@@ -53,7 +58,9 @@ func Register(ctx context.Context) models.RestApi {
 		return response
 	}
 
+	fmt.Println("6")
 	_, status, err := db.StoreRegister(user)
+	fmt.Println("7")
 
 	if err != nil {
 		response.Message = "Error registering user: " + err.Error()

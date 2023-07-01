@@ -1,0 +1,5 @@
+#! /bin/bash
+rm main
+rm main.zip
+GOOS=linux GOARCH=amd64 /usr/local/opt/go/libexec/bin/go build -o main main.go
+zip -r main ./

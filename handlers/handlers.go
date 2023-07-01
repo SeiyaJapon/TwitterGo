@@ -28,26 +28,24 @@ func Handlers(ctx context.Context, request events.APIGatewayProxyRequest) models
 
 	switch ctx.Value(models.Key("method")).(string) {
 	case "POST":
-		switch ctx.Value(models.Key("method")).(string) {
+		switch ctx.Value(models.Key("path")).(string) {
 		case "register":
 			return routes.Register(ctx)
+		case "login":
+			return
 		}
-		//
 	case "GET":
-		switch ctx.Value(models.Key("method")).(string) {
+		switch ctx.Value(models.Key("path")).(string) {
 
 		}
-		//
 	case "PUT":
-		switch ctx.Value(models.Key("method")).(string) {
+		switch ctx.Value(models.Key("path")).(string) {
 
 		}
-		//
 	case "DELETE":
-		switch ctx.Value(models.Key("method")).(string) {
+		switch ctx.Value(models.Key("path")).(string) {
 
 		}
-		//
 	}
 
 	response.Message = "Method Invalid"

@@ -10,6 +10,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.19.10 // indirect
 	github.com/golang-jwt/jwt/v5 v5.0.0 // indirect
 	github.com/urfave/cli/v2 v2.1.1 // indirect
+	github.com/xdg-go/stringprep v1.0.4 // indirect
 	go.mongodb.org/mongo-driver v1.12.0 // indirect
 	golang.org/x/crypto v0.10.0 // indirect
 )
