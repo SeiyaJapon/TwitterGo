@@ -17,7 +17,7 @@ func Handlers(ctx context.Context, request events.APIGatewayProxyRequest) models
 	var response models.RestApi
 	response.Status = 400
 
-	isSuccess, statusCode, msg, _ := validateAuthorization(ctx, request)
+	isSuccess, statusCode, msg, claim := validateAuthorization(ctx, request)
 
 	if !isSuccess {
 		response.Status = statusCode
@@ -41,7 +41,8 @@ func Handlers(ctx context.Context, request events.APIGatewayProxyRequest) models
 		}
 	case "PUT":
 		switch ctx.Value(models.Key("path")).(string) {
-
+		case "updateProfile":
+			return routes.UpdateProfile(ctx, claim)
 		}
 	case "DELETE":
 		switch ctx.Value(models.Key("path")).(string) {
