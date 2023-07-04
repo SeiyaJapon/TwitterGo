@@ -62,7 +62,7 @@ func validateAuthorization(ctx context.Context, request events.APIGatewayProxyRe
 		return true, 200, "", models.Claim{}
 	}
 
-	token := request.Headers["authorization"]
+	token := request.Headers["Authorization"]
 
 	if len(token) == 0 {
 		return false, 401, "Required token", models.Claim{}

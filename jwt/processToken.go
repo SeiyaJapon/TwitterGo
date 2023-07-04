@@ -35,7 +35,7 @@ func ProcessToken(tk string, JWTSign string) (*models.Claim, bool, string, error
 
 		if found {
 			Email = claims.Email
-			IDUsuario = claims.ID
+			IDUsuario = claims.ID.Hex()
 		}
 
 		return &claims, found, IDUsuario, nil

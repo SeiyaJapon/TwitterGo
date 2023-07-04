@@ -21,7 +21,7 @@ func UpdateProfile(ctx context.Context, claim models.Claim) models.RestApi {
 		response.Message = "Incorrect Data: " + err.Error()
 	}
 
-	status, err := db.UpdateRegister(user, claim.ID)
+	status, err := db.UpdateRegister(user, claim.ID.Hex())
 
 	if err != nil || !status {
 		response.Message = "Get error updating user: " + err.Error()
