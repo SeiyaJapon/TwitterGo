@@ -39,6 +39,8 @@ func Handlers(ctx context.Context, request events.APIGatewayProxyRequest) models
 			return routes.UploadImage(ctx, "A", request, claim)
 		case "uploadBanner":
 			return routes.UploadImage(ctx, "B", request, claim)
+		case "addRelation":
+			return routes.AddRelation(ctx, request, claim)
 		}
 	case "GET":
 		switch ctx.Value(models.Key("path")).(string) {
